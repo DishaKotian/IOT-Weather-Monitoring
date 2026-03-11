@@ -111,21 +111,42 @@ IoT Weather Monitoring System is a sophisticated, production-ready web applicati
 The application uses two external APIs:
 
 1. **OpenWeatherMap API** - For real-time weather data
-   - Current Key: `8e89146f89e624257dd10eea9b70947b`
-   - Get your own: [OpenWeatherMap API](https://openweathermap.org/api)
+   - Sign up: [OpenWeatherMap API](https://openweathermap.org/api)
+   - Get your free API key from the dashboard
 
-2. **ThingSpeak API** - For IoT data logging
-   - Current Write Key: `F5KPFW2H7OWSSBWP`
-   - Get your own: [ThingSpeak](https://thingspeak.com/)
+2. **ThingSpeak API** - For IoT data logging (optional)
+   - Sign up: [ThingSpeak](https://thingspeak.com/)
+   - Create a channel and get the Write API Key
 
-### Updating API Keys
+### Setting Up API Keys
 
-Open `weather_web.py` and update these variables:
+**Option 1: Environment Variables (Recommended for Production)**
 
-```python
-WEATHER_API_KEY = "your_openweathermap_api_key"
-THINGSPEAK_API_KEY = "your_thingspeak_write_key"
+Set these environment variables before running the application:
+
+```bash
+# Windows (PowerShell)
+$env:WEATHER_API_KEY="your_openweathermap_api_key"
+$env:THINGSPEAK_API_KEY="your_thingspeak_write_key"
+$env:SECRET_KEY="your_random_secret_key"
+
+# Linux/Mac
+export WEATHER_API_KEY="your_openweathermap_api_key"
+export THINGSPEAK_API_KEY="your_thingspeak_write_key"
+export SECRET_KEY="your_random_secret_key"
 ```
+
+**Option 2: .env File (For Development)**
+
+Create a `.env` file in the project root:
+
+```env
+WEATHER_API_KEY=your_openweathermap_api_key
+THINGSPEAK_API_KEY=your_thingspeak_write_key
+SECRET_KEY=your_random_secret_key
+```
+
+**⚠️ IMPORTANT**: Never commit your `.env` file or expose your API keys publicly!
 
 ### Server Configuration
 

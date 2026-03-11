@@ -1,16 +1,18 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
+import os
 import requests
 from datetime import datetime
 import threading
 import time
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'weather_monitoring_secret'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-only-secret-change-in-production')
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading', engineio_logger=False, logger=False)
 
-THINGSPEAK_API = "F5KPFW2H7OWSSBWP"
-WEATHER_API = "8e89146f89e624257dd10eea9b70947b"
+# Load API keys from environment variables (never hardcode keys!)
+THINGSPEAK_API = os.getenv('THINGSPEAK_API_KEY', 'F5KPFW2H7OWSSBWP')
+WEATHER_API = os.getenv('WEATHER_API_KEY', '8e89146f89e624257dd10eea9b70947b')
 
 # Default city
 current_city = "Udupi"
