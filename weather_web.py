@@ -11,8 +11,17 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-only-secret-change-in-pr
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading', engineio_logger=False, logger=False)
 
 # Load API keys from environment variables (never hardcode keys!)
-THINGSPEAK_API = os.getenv('THINGSPEAK_API_KEY', 'F5KPFW2H7OWSSBWP')
-WEATHER_API = os.getenv('WEATHER_API_KEY', '8e89146f89e624257dd10eea9b70947b')
+THINGSPEAK_API = os.getenv('THINGSPEAK_API_KEY')  # Optional - for IoT logging
+WEATHER_API = os.getenv('WEATHER_API_KEY')  # Required - for weather data
+
+# Validate required API keys
+if not WEATHER_API:
+    raise ValueError(
+        "⚠️  WEATHER_API_KEY is required!\n"
+        "Set it as an environment variable:\n"
+        "  PowerShell: $env:WEATHER_API_KEY='your_key_here'\n"
+        "  Linux/Mac: export WEATHER_API_KEY='your_key_here'"
+    )
 
 # Default city
 current_city = "Udupi"
@@ -92,6 +101,8 @@ def update_weather():
                 
                 # Send to ThingSpeak asynchronously (non-blocking)
                 def send_to_thingspeak():
+                    if not THINGSPEAK_API:
+                        return  # Skip if ThingSpeak key not configured
                     try:
                         thingspeak_url = f"https://api.thingspeak.com/update?api_key={THINGSPEAK_API}&field1={temperature}&field2={humidity}"
                         requests.get(thingspeak_url, timeout=3)  # Reduced timeout
